@@ -36,11 +36,14 @@ for (i in 1:nrow(x)) {
 	dateHour = paste0(date, ' ', hour)
 	posixDate = as.POSIXct(dateHour, tz='America/New_York')
 	formattedDate = format(posixDate, tz=x$timezone[i], usetz=T)
+	
+	# Extract the time (hh:mm:ss) from the date & time, taking into account that the
+	# time is not printed when it's midnight.
 	if (grepl('\\d+:\\d+:\\d+', formattedDate)) {
 		signupTime = sub('^.+( \\d+:\\d+:\\d+ ).+$', '\\1', formattedDate)
 		signupTime = trimws(signupTime)
 	} else {
-		signupTime = NA
+		signupTime = '00:00:00'
 	}
 	x$signupTime[i] = signupTime
 }
